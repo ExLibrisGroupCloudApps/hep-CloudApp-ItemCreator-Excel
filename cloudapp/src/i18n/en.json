@@ -1,0 +1,26 @@
+{
+	"Main": {
+		"CreateItems": "Create Items",
+		"DragFile": "Drag a file or click to browse",
+		"Processed": "Total number of items is",
+		"Created": "Number of created items is",
+		"Failed": "Number of failed items is",
+		"Results":"Results",
+		"ProcessedItems": "Processed Items",
+		"Error":"Error"
+	},
+	"Reset": "Reset",
+	"Save": "Save",
+	"Settings": {
+		"Saved": "Settings successfully saved.",
+		"Title": "Settings"
+	},
+	"Help" :{
+		"Title": "Items Creator Help",
+		"LookupKey": "Set lookup key",
+		"LookupKeyDescription": "The lookup key can be set as follows: ",
+		"HoldingsId": "The MMSID of an existing title and the ID of an existing Holdings record should be placed in the two leftmost columns. ",
+		"ItemFileds": "The columns following the Holdings MMSID should include the item fields to be created. Search the rest_item.xsd for the name of the field, and then insert the field name as a column label.",
+		"Example" :"For example, if you want to add an item to a title with MMSID '991234567' and Holdings record with ID '221234567', and the barcode of the item should be 'S0126151', Enumeration A should be '1' and Chronology I should be '2019', create an Excel file as shown below."
+	}
+}

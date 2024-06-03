@@ -1,0 +1,17 @@
+{
+   "id": "Items Creator by Excel",
+   "title": "Items Creator by Excel",
+   "subtitle": "Create items easily by uploading an Excel file",
+   "author": "Ex Libris",
+   "icon": {
+      "type": "font",
+      "value": "fa fa-barcode"
+   },
+   "pages": {
+      "help": "/#/help"
+   },
+   "fullscreen": {
+      "allow": true,
+      "open": false
+   }
+}
