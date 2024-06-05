@@ -18,7 +18,6 @@ export class ItemService {
       return of(this.handleError({ok:false, status:"", message:"Keys mms_id and holding_id are needed", statusText:"", error:true}, item));
     }
     let url= `/bibs/${item.mms_id}/holdings/${item.holding_id}/items`;
-    console.log("ITEM: ", item);
     const itemToSend = this.getItemToSend(item);
     console.log(itemToSend);
     return this.restService.call(url).pipe(
