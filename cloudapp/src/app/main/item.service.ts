@@ -18,6 +18,7 @@ export class ItemService {
       return of(this.handleError({ok:false, status:"", message:"Keys mms_id and holding_id are needed", statusText:"", error:true}, item));
     }
     let url= `/bibs/${item.mms_id}/holdings/${item.holding_id}/items`;
+    console.log("ITEM: ", item);
     const itemToSend = this.getItemToSend(item);
     console.log(itemToSend);
     return this.restService.call(url).pipe(
@@ -48,6 +49,11 @@ export class ItemService {
   private getItemToSend(item: any) {
     delete item.mms_id;
     delete item.holding_id;
+    for (const key in item) {
+      if(key.includes("_EMPTY")) {
+        delete item[key];
+      }
+    }
     const keysToSendIntoObject = ["physical_material_type", "policy", "provenance", "break_indicator", "pattern_type",
     "alternative_call_number_type", "physical_condition", "committed_to_retain", "retention_reason"];
     Object.keys(item).filter(key => keysToSendIntoObject.includes(key)).forEach(keyToChange => {

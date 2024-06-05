@@ -55,7 +55,7 @@ export class MainComponent implements OnInit, OnDestroy {
         var first_sheet_name = workbook.SheetNames[0];
         var worksheet = workbook.Sheets[first_sheet_name];
         
-        let items: any[] =XLSX.utils.sheet_to_json(worksheet,{defval:""});
+        let items: any[] =XLSX.utils.sheet_to_json(worksheet , {defval:""});
         from(items.map(item => 
           this.itemService
           .processCreateItem(item)
