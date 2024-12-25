@@ -18,29 +18,60 @@ export class ItemService {
       return of(this.handleError({ok:false, status:"", message:"Keys mms_id and holding_id are needed", statusText:"", error:true}, item));
     }
     const mms_id = item.mms_id;
-    const holding_id = item.holding_id
-    let url= `/bibs/${mms_id}/holdings/${holding_id}/items`;
+    const holding_id = item.holding_id;
+    let url = `/bibs/${mms_id}`;
     const itemToSend = this.getItemToSend(item);
+
     console.log(itemToSend);
+
     return this.restService.call(url).pipe(
       switchMap(resp => {
         console.log(resp, item);
-        if(resp.item == null && resp.total_record_count > 0) {
-          return of(this.handleError({ok:false, status:"", message:`Mms ID ${mms_id} does not exist`, statusText:"", error:true}, item));
+        if (resp.mms_id == null) {
+          return of(this.handleError({ 
+            ok: false, 
+            status: "", 
+            message: `Mms ID ${mms_id} does not exist`, 
+            statusText: "", 
+            error: true 
+          }, item));
         }
-        return this.restService.call({
-        url,
-        method: HttpMethod.POST,
-        requestBody: itemToSend
-      }).pipe(
-        catchError(e => {
-          if(e.message.includes("Check holdings")) {
-            e.message = `Holding ID ${holding_id} does not exist`;
-          }
-          return of(this.handleError(e, item));
-        })
-      )}
-    ));
+        url += `/holdings/${holding_id}`;
+        return this.restService.call(url).pipe(
+          switchMap(resp => {
+            console.log(resp, item);
+            if (resp.holding_id == null) {
+              return of(this.handleError({ 
+                ok: false, 
+                status: "", 
+                message: `Holding ID ${holding_id} does not exist`, 
+                statusText: "", 
+                error: true 
+              }, item));
+            }
+            url += `/items`;
+            return this.restService.call({
+              url,
+              method: HttpMethod.POST,
+              requestBody: itemToSend
+            }).pipe(
+              catchError(e => {
+                if (e.message.includes("Check holdings")) {
+                  e.message = `Holding ID ${holding_id} does not exist`;
+                }
+                return of(this.handleError(e, item));
+              })
+            );
+          }),
+          catchError(e => {
+            return of(this.handleError(e, item));
+          })
+        );
+      }),
+      catchError(e => {
+        return of(this.handleError(e, item));
+      })
+    );
   }
   
   public handleError(e: RestErrorResponse, item: any) {
