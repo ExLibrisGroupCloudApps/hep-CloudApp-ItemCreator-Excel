@@ -83,18 +83,34 @@ export class ItemService {
   private getItemToSend(item: any) {
     delete item.mms_id;
     delete item.holding_id;
+    
+    //remove empty lines
     for (const key in item) {
       if(key.includes("_EMPTY")) {
         delete item[key];
       }
     }
+
+    //wrap into object for needed fields
     const keysToSendIntoObject = ["physical_material_type", "policy", "provenance", "break_indicator", "pattern_type",
-    "alternative_call_number_type", "physical_condition", "committed_to_retain", "retention_reason"];
+    "alternative_call_number_type", "physical_condition", "committed_to_retain", "retention_reason",
+    "temp_library", "temp_location", "temp_call_number_type", "temp_policy"];
     Object.keys(item).filter(key => keysToSendIntoObject.includes(key)).forEach(keyToChange => {
       const value = item[keyToChange];
       item[keyToChange] = {value: value};
     });
-    return {item_data: item};
+
+    //remove from item and add in holding obj holding fields
+    const holding = {};
+    const keysInHoldingData = ["copy_id", "in_temp_location", "temp_library", "temp_location", "temp_call_number_type",
+      "temp_call_number", "temp_call_number_source", "temp_policy", "due_back_date"];
+      Object.keys(item).filter(key => keysInHoldingData.includes(key)).forEach(keyInHolding => {
+        const value = item[keyInHolding];
+        delete item[keyInHolding];
+        holding[keyInHolding] = value;
+      });
+    
+    return {item_data: item, holding_data: holding};
   }
 
   
